@@ -233,11 +233,11 @@ class TranslationRepository extends Repository
     public function loadSource($locale, $namespace, $group)
     {
         return $this->model
+            ->select(\Illuminate\Support\Facades\DB::raw("CONCAT(`group`, '.', item) AS groupItem, translator_translations.*"))
             ->whereLocale($locale)
             ->whereNamespace($namespace)
-            ->whereGroup($group)
             ->get()
-            ->keyBy('item')
+            ->keyBy('groupItem')
             ->map(function ($translation) {
                 return $translation['text'];
             })
